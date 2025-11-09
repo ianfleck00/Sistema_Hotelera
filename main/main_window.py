@@ -153,14 +153,18 @@ class MainWindow:
 
     def agregar_reserva(self):
         def guardar():
-            service.agregar_reserva(
+            resultado = service.agregar_reserva(
                 cliente_id=clientes[combo_cliente.current()][0],
                 habitacion_id=habitaciones[combo_hab.current()][0],
                 fecha_inicio=entry_inicio.get(),
                 fecha_fin=entry_fin.get()
             )
-            top.destroy()
-            self.cargar_reservas()
+            if resultado:
+                messagebox.showinfo("Éxito", "Reserva creada correctamente")
+                top.destroy()
+                self.cargar_reservas()
+            else:
+                messagebox.showerror("Error", "La habitación no está disponible en las fechas seleccionadas.\n\nPor favor elija otras fechas u otra habitación.")
 
         top = tk.Toplevel(self.root)
         top.title("Nueva Reserva")

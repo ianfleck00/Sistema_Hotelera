@@ -69,10 +69,45 @@ def obtener_reservas():
     """
     return db.fetchall(q)
 
+def verificar_disponibilidad_habitacion(habitacion_id, fecha_inicio, fecha_fin, reserva_id=None):
+    """
+    Verifica si una habitación está disponible en un rango de fechas.
+    Retorna True si está disponible, False si hay conflicto.
+    """
+    # Query para buscar reservas que se solapen con las fechas solicitadas
+    # Una reserva se solapa si:
+    # - La fecha de entrada está entre la entrada y salida de otra reserva
+    # - La fecha de salida está entre la entrada y salida de otra reserva  
+    # - La nueva reserva contiene completamente otra reserva
+    q = """
+    SELECT COUNT(*) 
+    FROM reservas 
+    WHERE habitacion_id = %s 
+    AND (
+        (fecha_entrada <= %s AND fecha_salida > %s) OR
+        (fecha_entrada < %s AND fecha_salida >= %s) OR
+        (fecha_entrada >= %s AND fecha_salida <= %s)
+    )
+    """
+    params = [habitacion_id, fecha_inicio, fecha_inicio, fecha_fin, fecha_fin, fecha_inicio, fecha_fin]
+    
+    # Si estamos editando una reserva existente, excluirla de la búsqueda
+    if reserva_id:
+        q += " AND id != %s"
+        params.append(reserva_id)
+    
+    result = db.fetchone(q, tuple(params))
+    return result[0] == 0  # True si no hay conflictos
+
 def agregar_reserva(cliente_id, habitacion_id, fecha_inicio, fecha_fin):
+    # Verificar disponibilidad antes de agregar
+    if not verificar_disponibilidad_habitacion(habitacion_id, fecha_inicio, fecha_fin):
+        return False  # Habitación no disponible
+    
     reserva_id = get_next_id("reservas")
     q = "INSERT INTO reservas (id, cliente_id, habitacion_id, fecha_entrada, fecha_salida) VALUES (%s,%s,%s,%s,%s)"
     db.execute(q, (reserva_id, cliente_id, habitacion_id, fecha_inicio, fecha_fin))
+    return True  # Reserva creada exitosamente
 
 def eliminar_reserva(reserva_id):
     db.execute("DELETE FROM reservas WHERE id = %s", (reserva_id,))
