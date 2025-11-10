@@ -51,10 +51,10 @@ def eliminar_cliente(cliente_id):
 def obtener_habitaciones():
     return db.fetchall("SELECT * FROM habitaciones")
 
-def agregar_habitacion(numero, tipo, precio):
+def agregar_habitacion(numero, tipo, precio_por_noche_por_noche):
     habitacion_id = get_next_id("habitaciones")
-    q = "INSERT INTO habitaciones (id, numero, tipo, precio) VALUES (%s,%s,%s,%s)"
-    db.execute(q, (habitacion_id, numero, tipo, precio))
+    q = "INSERT INTO habitaciones (id, numero, tipo, precio_por_noche) VALUES (%s,%s,%s,%s)"
+    db.execute(q, (habitacion_id, numero, tipo, precio_por_noche_por_noche))
 
 def eliminar_habitacion(habitacion_id):
     db.execute("DELETE FROM habitaciones WHERE id = %s", (habitacion_id,))
