@@ -6,7 +6,7 @@ class LoginWindow:
     def __init__(self, root, on_success):
         self.root = root
         self.root.title("Sistema de Gestión Hotelera - Login")
-        self.root.geometry("450x550")
+        self.root.geometry("450x500")
         self.root.configure(bg="#2c3e50")
         self.root.resizable(False, False)
         self.on_success = on_success
