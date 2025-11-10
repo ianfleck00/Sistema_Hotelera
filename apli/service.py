@@ -74,11 +74,7 @@ def verificar_disponibilidad_habitacion(habitacion_id, fecha_inicio, fecha_fin, 
     Verifica si una habitación está disponible en un rango de fechas.
     Retorna True si está disponible, False si hay conflicto.
     """
-    # Query para buscar reservas que se solapen con las fechas solicitadas
-    # Una reserva se solapa si:
-    # - La fecha de entrada está entre la entrada y salida de otra reserva
-    # - La fecha de salida está entre la entrada y salida de otra reserva  
-    # - La nueva reserva contiene completamente otra reserva
+    
     q = """
     SELECT COUNT(*) 
     FROM reservas 

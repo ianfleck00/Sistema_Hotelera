@@ -82,7 +82,6 @@ proyecto/
 
 ## 💡 Integrantes
 
-**Gabriel Carlos Prestes**  
-**Mauricio Ruperez**  
+**Gabriel Carlos Prestes**   
 **Ian Fleck**  
 💼 Proyecto desarrollado para prácticas de programación y gestión de software en Programacion Orientada a Obajetos.
